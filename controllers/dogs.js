@@ -76,7 +76,7 @@ const createWalk = async (req, res) => {
       return res.status(404).json({ message: 'Dog not found'});
     }
 
-    // Create new walk w walkData
+    // Create new walk w/ walkData
     const newWalk  = {
       frequency: walkData.frequency,
       walkTimes: walkData.walkTimes
@@ -103,14 +103,12 @@ const updateWalk = async (req, res) => {
 
     // find dog
     const dog = await Dog.findById(dogId);
-
     if (!dog) {
       return res.status(404).json({ message: 'Dog not found'})
     }
 
     // find walk
     const walk = dog.walking.id(walkId);
-
     if (!walk) {
       return res.status(404).json({ message: 'Walk not found'})
     }
@@ -129,7 +127,30 @@ const updateWalk = async (req, res) => {
   }
 }
 
+const deleteWalk = async (req, res) => {
+  try {
+    const dogId = req.params.id;
+    const walkId = req.params.walkId
+
+    const dog = await Dog.findById(dogId);
+    if (!dog) {
+      return res.status(404).json({ message: 'Dog not found' })
+    }
+
+    const walk = dog.walking.id(walkId);
+    if(!walk) {
+      return res.status(404).json({ message: 'Walk not found' })
+    }
+
+    walk.remove();
+    await dog.save();
+
+    res.status(200).json({ message: 'Walk deleted successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};
 
 
-
-export { index, addPhoto, create, createWalk, updateWalk }
+export { index, addPhoto, create, createWalk, updateWalk, deleteWalk }
