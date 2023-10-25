@@ -70,7 +70,7 @@ const createWalk = async (req, res) => {
     const walkData = req.body;
 
     // Find dog by ID
-    const dog = await Dog.findById(id);
+    const dog = await Dog.findById(dogId);
 
     if (!dog) {
       return res.status(404).json({ message: 'Dog not found'});
@@ -96,4 +96,4 @@ const createWalk = async (req, res) => {
 }
 
 
-export { index, addPhoto, create }
+export { index, addPhoto, create, createWalk }

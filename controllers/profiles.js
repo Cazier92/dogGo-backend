@@ -30,4 +30,18 @@ async function addPhoto(req, res) {
   }
 }
 
-export { index, addPhoto }
+async function updateLocation(req, res) {
+  try {
+    const profile = await Profile.findById(req.params.id)
+    const locationDoc = profile.location
+    locationDoc.set(req.body.location)
+    await profile.save()
+    
+    res.status(201).json(profile)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
+export { index, addPhoto, updateLocation }
