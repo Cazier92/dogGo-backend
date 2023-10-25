@@ -16,7 +16,8 @@ const dogSchema = new Schema({
   photo: String,
   age: Number,
   breed: String,
-  walking: {type: [walkingSchema], required: true}
+  walking: {type: [walkingSchema], required: true},
+  owner: {type: Schema.Types.ObjectId, ref: 'Profile'}
 },{
   timestamps: true,
 })
