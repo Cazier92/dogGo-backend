@@ -100,7 +100,6 @@ const updateWalk = async (req, res) => {
     const dogId = req.params.id;
     const walkId = req.params.walkId;
     const walkData = req.body;
-
     // find dog
     const dog = await Dog.findById(dogId);
     if (!dog) {
@@ -154,3 +153,4 @@ const deleteWalk = async (req, res) => {
 
 
 export { index, addPhoto, create, createWalk, updateWalk, deleteWalk }
+
