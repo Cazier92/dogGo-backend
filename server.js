@@ -27,6 +27,7 @@ app.use(formData.parse())
 app.use('/api/profiles', profilesRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/dogs', dogsRouter)
+app.use('/api/weather', weatherRouter)
 
 
 // handle 404 errors
