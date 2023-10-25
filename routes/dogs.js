@@ -5,7 +5,7 @@ import * as dogsCtrl from '../controllers/dogs.js'
 const router = Router()
 
 /*---------- Public Routes ----------*/
-//! Remove/Move to protected routes prior to deployment! 
+//! Remove before Deployment!!!
 router.get('/', dogsCtrl.index)
 router.get('/:id', dogsCtrl.show)
 

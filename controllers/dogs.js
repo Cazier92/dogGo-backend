@@ -117,7 +117,7 @@ const createWalk = async (req, res) => {
     // Save the updated dog
     await dog.save();
 
-    res.status(201).json(newWalk);
+    res.status(201).json(dog);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
@@ -126,10 +126,10 @@ const createWalk = async (req, res) => {
 
 const updateWalk = async (req, res) => {
   try {
+    
     const dogId = req.params.id;
     const walkId = req.params.walkId;
     const walkData = req.body;
-
     // find dog
     const dog = await Dog.findById(dogId);
     if (!dog) {
@@ -149,12 +149,13 @@ const updateWalk = async (req, res) => {
     // save updated dog
     await dog.save();
 
-    res.status(200).json(walk);
+    res.status(200).json(dog);
   } catch (error) {
     console.log(error);
     res.status(500).json(error)
   }
 }
+
 
 const deleteWalk = async (req, res) => {
   try {
