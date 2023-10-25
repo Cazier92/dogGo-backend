@@ -12,7 +12,7 @@ const walkingSchema = new Schema({
 })
 
 const dogSchema = new Schema({
-  name: String,
+  name: {type: String, required: true},
   photo: String,
   age: Number,
   breed: String,
