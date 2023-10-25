@@ -40,3 +40,13 @@ userSchema.methods.comparePassword = async function (tryPassword) {
 const User = mongoose.model('User', userSchema)
 
 export { User }
+
+
+// name: {type: String, required: true},
+// email: { type: String, required: true, lowercase: true },
+// password: {
+//   type: String,
+//   trim: true,
+//   minLength: 6,
+//   required: true
+// },

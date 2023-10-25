@@ -16,6 +16,13 @@ const dogSchema = new Schema({
   photo: String,
   age: Number,
   breed: String,
+  birthday: Date,
+  gender: {
+    type: String,
+    emun: [
+      "Boy", "Girl"
+    ]
+  },
   walking: {type: [walkingSchema], required: true},
   owner: {type: Schema.Types.ObjectId, ref: 'Profile'}
 },{
