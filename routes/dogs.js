@@ -5,15 +5,11 @@ import * as dogsCtrl from '../controllers/dogs.js'
 const router = Router()
 
 /*---------- Public Routes ----------*/
-//! Remove/Move to protected routes prior to deployment! 
-router.get('/', dogsCtrl.index)
-
-
-//! ^^^ Remove/Move to protected routes prior to deployment! ^^^
 
 
 /*---------- Protected Routes ----------*/
 router.use(decodeUserFromToken)
+router.get('/', checkAuth, dogsCtrl.index)
 
 router.post('/', checkAuth, dogsCtrl.create)
 router.post('/:id/walk', checkAuth, dogsCtrl.createWalk)
