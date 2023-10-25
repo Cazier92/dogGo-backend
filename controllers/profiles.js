@@ -32,12 +32,13 @@ async function addPhoto(req, res) {
 
 async function updateLocation(req, res) {
   try {
-    const profile = await Profile.findById(req.params.id)
-    const locationDoc = profile.location
-    locationDoc.set(req.body.location)
+    const profile = await Profile.findByIdAndUpdate(
+      req.params.id,
+      {location: req.body.location},
+      {new: true}
+    )
     await profile.save()
-    
-    res.status(201).json(profile)
+    res.status(200).json(profile)
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
