@@ -70,13 +70,13 @@ const createWalk = async (req, res) => {
     const walkData = req.body;
 
     // Find dog by ID
-    const dog = await Dog.findById(id);
+    const dog = await Dog.findById(dogId);
 
     if (!dog) {
       return res.status(404).json({ message: 'Dog not found'});
     }
 
-    // Create new walk w walkData
+    // Create new walk w/ walkData
     const newWalk  = {
       frequency: walkData.frequency,
       walkTimes: walkData.walkTimes
@@ -95,5 +95,62 @@ const createWalk = async (req, res) => {
   }
 }
 
+const updateWalk = async (req, res) => {
+  try {
+    const dogId = req.params.id;
+    const walkId = req.params.walkId;
+    const walkData = req.body;
 
-export { index, addPhoto, create }
+    // find dog
+    const dog = await Dog.findById(dogId);
+    if (!dog) {
+      return res.status(404).json({ message: 'Dog not found'})
+    }
+
+    // find walk
+    const walk = dog.walking.id(walkId);
+    if (!walk) {
+      return res.status(404).json({ message: 'Walk not found'})
+    }
+
+    // update walk data
+    walk.frequency = walkData.frequency;
+    walk.walkTimes = walkData.walkTimes;
+
+    // save updated dog
+    await dog.save();
+
+    res.status(200).json(walk);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error)
+  }
+}
+
+const deleteWalk = async (req, res) => {
+  try {
+    const dogId = req.params.id;
+    const walkId = req.params.walkId
+
+    const dog = await Dog.findById(dogId);
+    if (!dog) {
+      return res.status(404).json({ message: 'Dog not found' })
+    }
+
+    const walk = dog.walking.id(walkId);
+    if(!walk) {
+      return res.status(404).json({ message: 'Walk not found' })
+    }
+
+    walk.remove();
+    await dog.save();
+
+    res.status(200).json({ message: 'Walk deleted successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};
+
+
+export { index, addPhoto, create, createWalk, updateWalk, deleteWalk }
