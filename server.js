@@ -12,6 +12,7 @@ import './config/database.js'
 import { router as profilesRouter } from './routes/profiles.js'
 import { router as authRouter } from './routes/auth.js'
 import { router as dogsRouter } from './routes/dogs.js'
+import { router as weatherRouter } from './routes/weather.js'
 
 // create the express app
 const app = express()
