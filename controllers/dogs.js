@@ -66,11 +66,11 @@ async function addPhoto(req, res) {
 
 const createWalk = async (req, res) => {
   try {
-    const dogId = req.params.dogId;
+    const dogId = req.params.id;
     const walkData = req.body;
 
     // Find dog by ID
-    const dog = await Dog.findById(dogId);
+    const dog = await Dog.findById(id);
 
     if (!dog) {
       return res.status(404).json({ message: 'Dog not found'});
