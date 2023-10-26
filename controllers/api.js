@@ -16,9 +16,9 @@ const findWeather = async (req, res) => {
         country: weatherData.location.country,
         lat: weatherData.location.lat,
         lon: weatherData.location.lon,
-        tz_id: String,
-        localtime_epoch: Number,
-        localtime: String
+        tz_id: weatherData.location.tz_id,
+        localtime_epoch: weatherData.location.localtime_epoch,
+        localtime: weatherData.location.localtime
       },
       rain: {
         isRaining: Boolean,
