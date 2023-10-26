@@ -50,6 +50,22 @@ const create = async (req, res) => {
 
 //* Put/Update Functions
 
+async function update(req, res) {
+  try {
+    const dog = await Dog.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {new: true}
+    )
+    await dog.save()
+    res.status(200).json(dog)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
+
 async function addPhoto(req, res) {
   try {
     const imageFile = req.files.photo.path
@@ -186,6 +202,7 @@ const deleteWalk = async (req, res) => {
 export { 
   index, 
   show, 
+  update,
   addPhoto, 
   create, 
   createWalk, 
