@@ -1,13 +1,13 @@
-import { Router } from 'express'
-import { decodeUserFromToken, checkAuth } from '../middleware/auth.js'
-import * as weatherCtrl from '../controllers/weather.js'
+// import { Router } from 'express'
+// import { decodeUserFromToken, checkAuth } from '../middleware/auth.js'
+// import * as weatherCtrl from '../controllers/weather.js'
 
-const router = Router()
+// const router = Router()
 
-/*---------- Public Routes ----------*/
+// /*---------- Public Routes ----------*/
 
 
-/*---------- Protected Routes ----------*/
+// /*---------- Protected Routes ----------*/
 
-router.use(decodeUserFromToken)
-router.get('/', checkAuth, weatherCtrl.index)
+// router.use(decodeUserFromToken)
+// router.get('/', checkAuth, weatherCtrl.index)
