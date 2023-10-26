@@ -1,6 +1,9 @@
 import { Profile } from '../models/profile.js'
 import { v2 as cloudinary } from 'cloudinary'
 
+/* ------------------ PROFILE ------------------ */
+//* Get/Indexing Functions
+
 async function index(req, res) {
   try {
     const profiles = await Profile.find({})
@@ -11,6 +14,8 @@ async function index(req, res) {
   }
 }
 
+//* Get/Show Functions
+
 async function show(req, res) {
   try {
     const profile = await Profile.findById(req.params.id)
@@ -20,6 +25,8 @@ async function show(req, res) {
     res.status(500).json(err)
   }
 }
+
+//* Put/Update Functions
 
 async function update(req, res) {
   try {
