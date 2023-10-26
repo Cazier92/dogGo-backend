@@ -11,3 +11,5 @@ const router = Router()
 
 router.use(decodeUserFromToken)
 router.get('/', checkAuth, weatherCtrl.index)
+
+export { router}

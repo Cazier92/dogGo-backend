@@ -1,10 +1,42 @@
 import { Profile } from '../models/profile.js'
 import { v2 as cloudinary } from 'cloudinary'
 
+/* ------------------ PROFILE ------------------ */
+//* Get/Indexing Functions
+
 async function index(req, res) {
   try {
     const profiles = await Profile.find({})
     res.json(profiles)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
+//* Get/Show Functions
+
+async function show(req, res) {
+  try {
+    const profile = await Profile.findById(req.params.id)
+    res.json(profile)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
+//* Put/Update Functions
+
+async function update(req, res) {
+  try {
+    const profile = await Profile.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {new: true}
+    )
+    await profile.save()
+    res.status(200).json(profile)
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
@@ -45,4 +77,10 @@ async function updateLocation(req, res) {
   }
 }
 
-export { index, addPhoto, updateLocation }
+export { 
+  index, 
+  show,
+  update,
+  addPhoto, 
+  updateLocation 
+}

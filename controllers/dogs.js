@@ -15,6 +15,18 @@ async function index(req, res) {
   }
 }
 
+//* Get/Show Functions
+
+async function show(req, res) {
+  try {
+    const dog = await Dog.findById(req.params.id)
+    res.json(dog)
+  } catch (error) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
 //* Post/Create Functions
 
 const create = async (req, res) => {
@@ -38,6 +50,22 @@ const create = async (req, res) => {
 
 //* Put/Update Functions
 
+async function update(req, res) {
+  try {
+    const dog = await Dog.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {new: true}
+    )
+    await dog.save()
+    res.status(200).json(dog)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
+
 async function addPhoto(req, res) {
   try {
     const imageFile = req.files.photo.path
@@ -60,7 +88,24 @@ async function addPhoto(req, res) {
 
 //* Delete Functions
 
-
+async function deleteDogProfile (req, res) {
+  try {
+    const dogId = req.params.id;
+    const dog = await Dog.findById(dogId);
+    const profile = await Profile.findById(req.user.profile);
+    if (profile.dogs.includes(dogId) === false) {
+      return res.status(404).json({ message: 'Dog not found' })
+    }
+    // Dog.findByIdAndDelete(dogId);
+    profile.dogs.remove(dogId);
+    await profile.save();
+    res.status(200).json({ message: 'Dog Profile successfully removed' })
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+}
 
 /* ------------------ WALK ------------------ */
 
@@ -154,5 +199,14 @@ const deleteWalk = async (req, res) => {
 };
 
 
-export { index, addPhoto, create, createWalk, updateWalk, deleteWalk }
-
+export { 
+  index, 
+  show, 
+  update,
+  addPhoto, 
+  create, 
+  createWalk, 
+  updateWalk, 
+  deleteWalk, 
+  deleteDogProfile 
+}
