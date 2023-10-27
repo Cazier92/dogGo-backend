@@ -11,11 +11,6 @@ const walkingSchema = new Schema({
   walkTimes: {type: [timeSchema]}
 })
 
-const photoSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  photoUrl: String,
-})
-
 const dogSchema = new Schema({
   name: {type: String, required: true},
   photoUrl: [photoSchema],
