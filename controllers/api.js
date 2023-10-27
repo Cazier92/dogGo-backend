@@ -20,30 +20,15 @@ const findWeather = async (req, res) => {
         localtime_epoch: weatherData.location.localtime_epoch,
         localtime: weatherData.location.localtime
       },
-      rain: {
-        isRaining: Boolean,
-        intensity: Number // You can use a scale to represent the intensity of rain
-      },
-      airQuality: {
-        index: Number, // You can use a scale to represent the air quality index
-        description: String
-      },
-      extremeHeat: {
-        isExtremeHeat: Boolean,
-        temperature: Number // You can set a threshold to determine extreme heat
-      },
-      snow: {
-        isSnowing: Boolean,
-        intensity: Number // You can use a scale to represent the intensity of snowfall
-      },
-      thunderstorms: {
-        isThunderstorm: Boolean,
-        description: String
-      }
+      temp_c: weatherData.current.temp_c,
+      temp_f: weatherData.current.temp_f,
+      condition: weatherData.current.condition.text,
+      code: weatherData.current.condition.code
     }
 
     const userWeather = await Weather.create(generatedWeather)
 
+    
   } catch (error) {
     res.status(500).json(error)
   }

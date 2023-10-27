@@ -8,7 +8,7 @@ const timeSchema = new Schema({
 
 const walkingSchema = new Schema({
   frequency: Number,
-  walkTimes: {type: [timeSchema], required: true}
+  walkTimes: {type: [timeSchema]}
 })
 
 const dogSchema = new Schema({
@@ -23,7 +23,7 @@ const dogSchema = new Schema({
       "Boy", "Girl"
     ]
   },
-  walking: {type: [walkingSchema], required: true},
+  walking: {type: [walkingSchema]},
   owner: {type: Schema.Types.ObjectId, ref: 'Profile'}
 },{
   timestamps: true,
