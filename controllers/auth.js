@@ -184,10 +184,10 @@ function login(req, res) {
       if (!req.body.password || !user.password) return res.status(400).json({ err: 'Missing password' })
       return user.comparePassword(req.body.password)
     })
-    .then((isMatch) => {
+    .then((isMatch, user) => {
       console.log('Compared passwords: ', isMatch); // Log the result of the password comparison
       if (isMatch) {
-        const token = createJWT(User)
+        const token = createJWT(user)
         res.json({ token })
       } else {
         res.status(401).json({ err: 'Incorrect password' })
