@@ -34,8 +34,11 @@ userSchema.pre('save', async function (next) {
 })
 
 userSchema.methods.comparePassword = async function (tryPassword) {
-  return await bcrypt.compare(tryPassword, this.password)
-}
+  console.log('Trying to compare password: ', tryPassword); // Log the input password
+  const isMatch = await bcrypt.compare(tryPassword, this.password)
+  console.log('Comparison result: ', isMatch); // Log the comparison result
+  return isMatch
+ }
 
 const User = mongoose.model('User', userSchema)
 
@@ -50,3 +53,6 @@ export { User }
 //   minLength: 6,
 //   required: true
 // },
+// profile: { type: Schema.Types.ObjectId, ref: 'Profile' },
+// }, {
+//   timestamps: true,
