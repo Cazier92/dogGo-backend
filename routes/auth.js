@@ -6,7 +6,7 @@ const router = Router()
 
 /*---------- Public Routes ----------*/
 router.post('/signup', authCtrl.signup)
-router.post('/login', authCtrl.login)
+router.post('/login', authCtrl.login, checkAuth)
 
 /*---------- Protected Routes ----------*/
 router.use(decodeUserFromToken)
