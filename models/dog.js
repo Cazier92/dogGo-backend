@@ -8,12 +8,17 @@ const timeSchema = new Schema({
 
 const walkingSchema = new Schema({
   frequency: Number,
-  walkTimes: {type: [timeSchema], required: true}
+  walkTimes: {type: [timeSchema]}
+})
+
+const photoSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  photoUrl: String,
 })
 
 const dogSchema = new Schema({
   name: {type: String, required: true},
-  photo: String,
+  photoUrl: [photoSchema],
   age: Number,
   breed: String,
   birthday: Date,
@@ -23,7 +28,7 @@ const dogSchema = new Schema({
       "Boy", "Girl"
     ]
   },
-  walking: {type: [walkingSchema], required: true},
+  walking: {type: [walkingSchema]},
   owner: {type: Schema.Types.ObjectId, ref: 'Profile'}
 },{
   timestamps: true,
