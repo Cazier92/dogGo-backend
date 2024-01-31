@@ -20,7 +20,7 @@ const dogSchema = new Schema({
   gender: {
     type: String,
     emun: [
-      "Boy", "Girl"
+      "Male", "Female"
     ]
   },
   walking: {type: [walkingSchema]},

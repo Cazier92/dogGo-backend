@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken'
 const SECRET = process.env.SECRET
 
 const decodeUserFromToken = (req, res, next) => {
-  let token = req.get('Authorization') || req.query.token || req.body.token
+  let token = req.get('Authorization') || req.query.token 
+  // || req.body.token
   if (!token) return next()
 
   token = token.replace('Bearer ', '')
@@ -11,8 +12,9 @@ const decodeUserFromToken = (req, res, next) => {
     if (err) return next(err)
 
     req.user = decoded.user
-    next()
+    req.exp = err ? null : new Date(decoded.exp * 1000)
   })
+  return next()
 }
 
 function checkAuth(req, res, next) {
