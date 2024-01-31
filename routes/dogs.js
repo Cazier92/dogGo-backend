@@ -16,7 +16,7 @@ router.get('/:id', dogsCtrl.show)
 /*---------- Protected Routes ----------*/
 router.use(decodeUserFromToken)
 
-router.post('/create', checkAuth, dogsCtrl.create)
+router.post('/', checkAuth, dogsCtrl.create)
 router.post('/:id/walk', checkAuth, dogsCtrl.createWalk)
 
 router.put('/:id', checkAuth, dogsCtrl.update)
