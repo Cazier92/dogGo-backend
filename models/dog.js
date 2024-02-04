@@ -24,7 +24,7 @@ const dogSchema = new Schema({
     ]
   },
   walking: {type: [walkingSchema]},
-  owner: {type: Schema.Types.ObjectId, ref: 'Profile'}
+  owner: [{type: Schema.Types.ObjectId, ref: 'Profile'}]
 },{
   timestamps: true,
 })

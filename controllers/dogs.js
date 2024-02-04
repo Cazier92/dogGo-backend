@@ -30,11 +30,11 @@ async function show(req, res) {
 //* Post/Create Functions
 
 function create(req, res) {
-  Dog.create(req.body)
   console.log('dog created', req.body)
+  Dog.create(req.body)
     .then(dog => {
-      Profile.findById(req.user.profile)
       console.log('profile found', req.user.profile)
+      Profile.findById(req.user.profile)
         .then(profile => {
           profile.dogs.push(dog)
           profile.save()
@@ -48,23 +48,6 @@ function create(req, res) {
       res.status(500).json(err)
     })
 }
-
-//   try {
-//     // req.body.owner = req.user.profile;
-//     const dog = await Dog.create(req.body);
-//     const profile = await Profile.findByIdAndUpdate(
-//       req.user.profile.id,
-//       { $push: { dogs: dog } },
-//       { new: true }
-//     );
-//     dog.owner.push(profile.id);
-
-//     res.status(201).json(dog);
-//   } catch (err) {
-//     res.status(500).json({ err: err.message })
-//   }
-// };
-
 
 //* Put/Update Functions
 
