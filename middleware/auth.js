@@ -4,7 +4,7 @@ const SECRET = process.env.SECRET
 
 const decodeUserFromToken = (req, res, next) => {
   let token = req.get('Authorization') || req.query.token 
-  // || req.body.token
+  || req.body.token
   if (!token) return next()
 
   token = token.replace('Bearer ', '')
