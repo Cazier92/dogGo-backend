@@ -1,14 +1,15 @@
-# fly.toml app configuration file generated for doggo-app on 2024-01-22T12:24:56-08:00
+# fly.toml app configuration file generated for doggo-app-dawn-butterfly-2775 on 2024-01-23T18:26:48-08:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "doggo-app"
+app = "doggo-app-dawn-butterfly-2775"
 primary_region = "sjc"
 kill_signal = "SIGINT"
 kill_timeout = "5s"
 
 [build]
+  image = "flyio/hellofly:latest"
 
 [http_service]
   internal_port = 3000

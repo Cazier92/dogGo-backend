@@ -21,7 +21,7 @@ async function show(req, res) {
   try {
     const dog = await Dog.findById(req.params.id)
     res.json(dog)
-  } catch (error) {
+  } catch (err) {
     console.log(err)
     res.status(500).json(err)
   }
@@ -29,24 +29,25 @@ async function show(req, res) {
 
 //* Post/Create Functions
 
-const create = async (req, res) => {
-  try {
-    req.body.owner = req.user.profile;
-    const dog = await Dog.create(req.body);
-    const profile = await Profile.findByIdAndUpdate(
-      req.user.profile,
-      { $push: { dogs: dog } },
-      { new: true }
-    );
-    dog.owner = profile;
-
-    res.status(201).json(dog);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-};
-
+function create(req, res) {
+  console.log('dog created', req.body)
+  Dog.create(req.body)
+    .then(dog => {
+      console.log('profile found', req.user.profile)
+      Profile.findById(req.user.profile)
+        .then(profile => {
+          profile.dogs.push(dog)
+          profile.save()
+          dog.owner.push(profile.id)
+          dog.save()
+          res.status(201).json(dog)
+        })
+    })
+    .catch(err => {
+      console.error("Error: ", err)
+      res.status(500).json(err)
+    })
+}
 
 //* Put/Update Functions
 
@@ -55,7 +56,7 @@ async function update(req, res) {
     const dog = await Dog.findByIdAndUpdate(
       req.params.id,
       req.body,
-      {new: true}
+      { new: true }
     )
     await dog.save()
     res.status(200).json(dog)
@@ -72,11 +73,11 @@ async function addPhoto(req, res) {
     const dog = await Dog.findById(req.params.id)
 
     const image = await cloudinary.uploader.upload(
-      imageFile, 
+      imageFile,
       { tags: `${req.user.email}` }
     )
     dog.photo = image.url
-    
+
     await dog.save()
     res.status(201).json(dog.photo)
   } catch (err) {
@@ -88,7 +89,7 @@ async function addPhoto(req, res) {
 
 //* Delete Functions
 
-async function deleteDogProfile (req, res) {
+async function deleteDogProfile(req, res) {
   try {
     const dogId = req.params.id;
     const dog = await Dog.findById(dogId);
@@ -100,10 +101,10 @@ async function deleteDogProfile (req, res) {
     profile.dogs.remove(dogId);
     await profile.save();
     res.status(200).json({ message: 'Dog Profile successfully removed' })
-    
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
   }
 }
 
@@ -118,11 +119,11 @@ const createWalk = async (req, res) => {
     const dog = await Dog.findById(dogId);
 
     if (!dog) {
-      return res.status(404).json({ message: 'Dog not found'});
+      return res.status(404).json({ message: 'Dog not found' });
     }
 
     // Create new walk w/ walkData
-    const newWalk  = {
+    const newWalk = {
       frequency: walkData.frequency,
       walkTimes: walkData.walkTimes
     }
@@ -134,28 +135,28 @@ const createWalk = async (req, res) => {
     await dog.save();
 
     res.status(201).json(dog);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
   }
 }
 
 const updateWalk = async (req, res) => {
   try {
-    
+
     const dogId = req.params.id;
     const walkId = req.params.walkId;
     const walkData = req.body;
     // find dog
     const dog = await Dog.findById(dogId);
     if (!dog) {
-      return res.status(404).json({ message: 'Dog not found'})
+      return res.status(404).json({ message: 'Dog not found' })
     }
 
     // find walk
     const walk = dog.walking.id(walkId);
     if (!walk) {
-      return res.status(404).json({ message: 'Walk not found'})
+      return res.status(404).json({ message: 'Walk not found' })
     }
 
     // update walk data
@@ -166,9 +167,9 @@ const updateWalk = async (req, res) => {
     await dog.save();
 
     res.status(200).json(dog);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error)
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err)
   }
 }
 
@@ -184,7 +185,7 @@ const deleteWalk = async (req, res) => {
     }
 
     const walk = dog.walking.id(walkId);
-    if(!walk) {
+    if (!walk) {
       return res.status(404).json({ message: 'Walk not found' })
     }
 
@@ -192,21 +193,21 @@ const deleteWalk = async (req, res) => {
     await dog.save();
 
     res.status(200).json({ message: 'Walk deleted successfully' });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
   }
 };
 
 
-export { 
-  index, 
-  show, 
+export {
+  index,
+  show,
   update,
-  addPhoto, 
-  create, 
-  createWalk, 
-  updateWalk, 
-  deleteWalk, 
-  deleteDogProfile 
+  addPhoto,
+  create,
+  createWalk,
+  updateWalk,
+  deleteWalk,
+  deleteDogProfile
 }
