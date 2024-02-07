@@ -1,10 +1,10 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
 const SECRET = process.env.SECRET
 
 const decodeUserFromToken = (req, res, next) => {
   console.log(req.headers, '<===== req.headers')
-  let authHeader = req.get('Authorization');
+  let authHeader = req.get('Authorization') || req.query.token;
   if (!authHeader) return next();
 
   // ensure the header is a string and starts with 'Bearer '
