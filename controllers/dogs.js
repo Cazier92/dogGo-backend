@@ -7,8 +7,9 @@ import { v2 as cloudinary } from 'cloudinary'
 
 async function index(req, res) {
   try {
-    const dogs = await Dog.find({})
-    res.json(dogs)
+    const currentDog = await Dog.find({})
+    console.log(currentDog)
+    res.status(200).json(currentDog)
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
@@ -20,7 +21,8 @@ async function index(req, res) {
 async function show(req, res) {
   try {
     const dog = await Dog.findById(req.params.id)
-    res.json(dog)
+    condsole.log(dog)
+    res.status(200).json(dog)
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
@@ -141,37 +143,72 @@ const createWalk = async (req, res) => {
   }
 }
 
-const updateWalk = async (req, res) => {
-  try {
+// function create(req, res) {
+//   console.log('dog created', req.body)
+//   Dog.create(req.body)
+//     .then(dog => {
+//       console.log('profile found', req.user.profile)
+//       Profile.findById(req.user.profile)
+//         .then(profile => {
+//           profile.dogs.push(dog)
+//           profile.save()
+//           dog.owner.push(profile.id)
+//           dog.save()
+//           res.status(201).json(dog)
+//         })
+//     })
+//     .catch(err => {
+//       console.error("Error: ", err)
+//       res.status(500).json(err)
+//     })
 
-    const dogId = req.params.id;
-    const walkId = req.params.walkId;
-    const walkData = req.body;
+const updateWalk = async (req, res) => {
+  // try {
+
+    // const dogId = req.params.id;
+    // const walkId = req.params.walkId;
+    // const walkData = req.body;
+
+        // if (!Dog) {
+    //   return res.status(404).json({ message: 'Dog not found' })
+    // } else {
+
+    // }
     // find dog
-    const dog = await Dog.findById(dogId);
-    if (!dog) {
-      return res.status(404).json({ message: 'Dog not found' })
-    }
+    Dog.findById(req.params.id)
+    .then(dog => {
+      if (!dog) {
+        return res.status(404).json({ message: 'Dog not found' })
+      } else {
+          const walk = dog.walking
+          walk.frequency = req.body.frequency;
+          walk.walkTimes = req.body.walkTimes;
+          dog.save();
+          res.status(200).json(dog);
+        }
+      })
+
 
     // find walk
-    const walk = dog.walking.id(walkId);
-    if (!walk) {
-      return res.status(404).json({ message: 'Walk not found' })
-    }
+    // const walk = dog.walking.id(walkId);
+    // if (!walk) {
+    //   return res.status(404).json({ message: 'Walk not found' })
+    // }
 
     // update walk data
-    walk.frequency = walkData.frequency;
-    walk.walkTimes = walkData.walkTimes;
+    // walk.frequency = walkData.frequency;
+    // walk.walkTimes = walkData.walkTimes;
 
-    // save updated dog
-    await dog.save();
+    // // save updated dog
+    // await dog.save();
 
-    res.status(200).json(dog);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err)
+    // res.status(200).json(dog);
+    .catch(err => {
+      console.error("Error: ", err)
+      res.status(500).json(err)
+    })
   }
-}
+// }
 
 
 const deleteWalk = async (req, res) => {
