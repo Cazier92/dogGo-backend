@@ -21,9 +21,9 @@ router.post('/:id/walk', checkAuth, dogsCtrl.createWalk)
 
 router.put('/:id', checkAuth, dogsCtrl.update)
 router.put('/:id/add-photo', checkAuth, dogsCtrl.addPhoto)
-router.put(':id/walk/:walkId', checkAuth, dogsCtrl.updateWalk)
+router.put('/:id/walk', checkAuth, dogsCtrl.updateWalk)
 
 router.delete('/:id', checkAuth, dogsCtrl.deleteDogProfile)
-router.delete(':id/walk/:walkId', checkAuth, dogsCtrl.deleteWalk)
+router.delete('/:id/walk/:walkId', checkAuth, dogsCtrl.deleteWalk)
 
 export { router }
