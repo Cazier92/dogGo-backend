@@ -112,77 +112,41 @@ async function deleteDogProfile(req, res) {
 
 /* ------------------ WALK ------------------ */
 
+
 const createWalk = async (req, res) => {
   try {
     const dogId = req.params.id;
     const walkData = req.body;
 
     // Find dog by ID
-    const dog = await Dog.findById(dogId);
-
-    if (!dog) {
-      return res.status(404).json({ message: 'Dog not found' });
-    }
-
-    // Create new walk w/ walkData
-    const newWalk = {
-      frequency: walkData.frequency,
-      walkTimes: walkData.walkTimes
-    }
-
-    // Add new walk to walking array
-    dog.walking.push(newWalk);
+    const dog = await Dog.findById(dogId)
+    .then(dog => {
+      if (!dog) {
+        return res.status(404).json({ message: 'Dog not found' });
+      }
+    // Add new walk data to walking array
+    dog.walking.push(walkData);
 
     // Save the updated dog
-    await dog.save();
-
+    dog.save();
     res.status(201).json(dog);
+    })
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
   }
 }
 
-// function create(req, res) {
-//   console.log('dog created', req.body)
-//   Dog.create(req.body)
-//     .then(dog => {
-//       console.log('profile found', req.user.profile)
-//       Profile.findById(req.user.profile)
-//         .then(profile => {
-//           profile.dogs.push(dog)
-//           profile.save()
-//           dog.owner.push(profile.id)
-//           dog.save()
-//           res.status(201).json(dog)
-//         })
-//     })
-//     .catch(err => {
-//       console.error("Error: ", err)
-//       res.status(500).json(err)
-//     })
 
 const updateWalk = async (req, res) => {
-  // try {
-
-    // const dogId = req.params.id;
-    // const walkId = req.params.walkId;
-    // const walkData = req.body;
-
-        // if (!Dog) {
-    //   return res.status(404).json({ message: 'Dog not found' })
-    // } else {
-
-    // }
     // find dog
     Dog.findById(req.params.id)
     .then(dog => {
       if (!dog) {
-        return res.status(404).json({ message: 'Dog not found' })
+        throw new Error('Dog not found')
       } else {
           const walk = dog.walking
-          walk.frequency = req.body.frequency;
-          walk.walkTimes = req.body.walkTimes;
+          walk.walkTimes = req.body.walkTimes
           dog.save();
           res.status(200).json(dog);
         }
@@ -243,6 +207,7 @@ export {
   update,
   addPhoto,
   create,
+  // indexWalks,
   createWalk,
   updateWalk,
   deleteWalk,

@@ -15,13 +15,14 @@ router.get('/:id', dogsCtrl.show)
 
 /*---------- Protected Routes ----------*/
 router.use(decodeUserFromToken)
+// router.get('/:id/walk', checkAuth, dogsCtrl.indexWalks)
 
 router.post('/', checkAuth, dogsCtrl.create)
 router.post('/:id/walk', checkAuth, dogsCtrl.createWalk)
 
 router.put('/:id', checkAuth, dogsCtrl.update)
 router.put('/:id/add-photo', checkAuth, dogsCtrl.addPhoto)
-router.put('/:id/walk', checkAuth, dogsCtrl.updateWalk)
+router.put('/:id/walk/', checkAuth, dogsCtrl.updateWalk)
 
 router.delete('/:id', checkAuth, dogsCtrl.deleteDogProfile)
 router.delete('/:id/walk/:walkId', checkAuth, dogsCtrl.deleteWalk)
