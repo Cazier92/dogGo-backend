@@ -21,7 +21,7 @@ async function index(req, res) {
 async function show(req, res) {
   try {
     const dog = await Dog.findById(req.params.id)
-    condsole.log(dog)
+    console.log(dog)
     res.status(200).json(dog)
   } catch (err) {
     console.log(err)
@@ -54,18 +54,17 @@ function create(req, res) {
 //* Put/Update Functions
 
 async function update(req, res) {
-  try {
-    const dog = await Dog.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    )
-    await dog.save()
-    res.status(200).json(dog)
-  } catch (err) {
-    console.log(err)
-    res.status(500).json(err)
-  }
+  Dog.findByIdAndUpdate(req.params.id)
+    .then(dog => {
+      req.params = req.body,
+        { new: true }
+      dog.save()
+      res.status(200).json(dog)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
+    })
 }
 
 
@@ -119,18 +118,18 @@ const createWalk = async (req, res) => {
     const walkData = req.body;
 
     // Find dog by ID
-    const dog = await Dog.findById(dogId)
-    .then(dog => {
-      if (!dog) {
-        return res.status(404).json({ message: 'Dog not found' });
-      }
-    // Add new walk data to walking array
-    dog.walking.push(walkData);
+    Dog.findById(dogId)
+      .then(dog => {
+        if (!dog) {
+          return res.status(404).json({ message: 'Dog not found' });
+        }
+        // Add new walk data to walking array
+        dog.walking.push(walkData)
 
-    // Save the updated dog
-    dog.save();
-    res.status(201).json(dog);
-    })
+        // Save the updated dog
+        dog.save();
+        res.status(201).json(dog);
+      })
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -139,18 +138,18 @@ const createWalk = async (req, res) => {
 
 
 const updateWalk = async (req, res) => {
-    // find dog
-    Dog.findById(req.params.id)
+  // find dog
+  console.log('profile found in updatewalk', req.user.profile)
+  Dog.findById(req.params.id)
     .then(dog => {
       if (!dog) {
         throw new Error('Dog not found')
       } else {
-          const walk = dog.walking
-          walk.walkTimes = req.body.walkTimes
-          dog.save();
-          res.status(200).json(dog);
-        }
-      })
+        dog.walking = req.body
+        dog.save();
+        res.status(200).json(dog);
+      }
+    })
 
 
     // find walk
@@ -171,7 +170,7 @@ const updateWalk = async (req, res) => {
       console.error("Error: ", err)
       res.status(500).json(err)
     })
-  }
+}
 // }
 
 
