@@ -2,14 +2,10 @@ import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
 
-const timeSchema = new Schema({
-  time: String
-})
+// const timeSchema = new Schema({
+//   time: String
+// })
 
-const walkingSchema = new Schema({
-  frequency: Number,
-  walkTimes: [timeSchema]
-})
 
 const photoSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -28,7 +24,7 @@ const dogSchema = new Schema({
       "Male", "Female"
     ]
   },
-  walking: [walkingSchema],
+  walking: [String],
   owner: [{type: Schema.Types.ObjectId, ref: 'Profile'}]
 },{
   timestamps: true,

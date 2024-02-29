@@ -21,7 +21,7 @@ async function index(req, res) {
 async function show(req, res) {
   try {
     const dog = await Dog.findById(req.params.id)
-    condsole.log(dog)
+    console.log(dog)
     res.status(200).json(dog)
   } catch (err) {
     console.log(err)
@@ -54,18 +54,17 @@ function create(req, res) {
 //* Put/Update Functions
 
 async function update(req, res) {
-  try {
-    const dog = await Dog.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    )
-    await dog.save()
-    res.status(200).json(dog)
-  } catch (err) {
-    console.log(err)
-    res.status(500).json(err)
-  }
+  Dog.findByIdAndUpdate(req.params.id)
+    .then(dog => {
+      req.params = req.body,
+        { new: true }
+      dog.save()
+      res.status(200).json(dog)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
+    })
 }
 
 
@@ -112,81 +111,45 @@ async function deleteDogProfile(req, res) {
 
 /* ------------------ WALK ------------------ */
 
+
 const createWalk = async (req, res) => {
   try {
     const dogId = req.params.id;
     const walkData = req.body;
 
     // Find dog by ID
-    const dog = await Dog.findById(dogId);
+    Dog.findById(dogId)
+      .then(dog => {
+        if (!dog) {
+          return res.status(404).json({ message: 'Dog not found' });
+        }
+        // Add new walk data to walking array
+        dog.walking.push(walkData)
 
-    if (!dog) {
-      return res.status(404).json({ message: 'Dog not found' });
-    }
-
-    // Create new walk w/ walkData
-    const newWalk = {
-      frequency: walkData.frequency,
-      walkTimes: walkData.walkTimes
-    }
-
-    // Add new walk to walking array
-    dog.walking.push(newWalk);
-
-    // Save the updated dog
-    await dog.save();
-
-    res.status(201).json(dog);
+        // Save the updated dog
+        dog.save();
+        res.status(201).json(dog);
+      })
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
   }
 }
 
-// function create(req, res) {
-//   console.log('dog created', req.body)
-//   Dog.create(req.body)
-//     .then(dog => {
-//       console.log('profile found', req.user.profile)
-//       Profile.findById(req.user.profile)
-//         .then(profile => {
-//           profile.dogs.push(dog)
-//           profile.save()
-//           dog.owner.push(profile.id)
-//           dog.save()
-//           res.status(201).json(dog)
-//         })
-//     })
-//     .catch(err => {
-//       console.error("Error: ", err)
-//       res.status(500).json(err)
-//     })
 
 const updateWalk = async (req, res) => {
-  // try {
-
-    // const dogId = req.params.id;
-    // const walkId = req.params.walkId;
-    // const walkData = req.body;
-
-        // if (!Dog) {
-    //   return res.status(404).json({ message: 'Dog not found' })
-    // } else {
-
-    // }
-    // find dog
-    Dog.findById(req.params.id)
+  // find dog
+  console.log('profile found in updatewalk', req.user.profile)
+  Dog.findById(req.params.id)
     .then(dog => {
       if (!dog) {
-        return res.status(404).json({ message: 'Dog not found' })
+        throw new Error('Dog not found')
       } else {
-          const walk = dog.walking
-          walk.frequency = req.body.frequency;
-          walk.walkTimes = req.body.walkTimes;
-          dog.save();
-          res.status(200).json(dog);
-        }
-      })
+        dog.walking = req.body
+        dog.save();
+        res.status(200).json(dog);
+      }
+    })
 
 
     // find walk
@@ -207,7 +170,7 @@ const updateWalk = async (req, res) => {
       console.error("Error: ", err)
       res.status(500).json(err)
     })
-  }
+}
 // }
 
 
@@ -243,6 +206,7 @@ export {
   update,
   addPhoto,
   create,
+  // indexWalks,
   createWalk,
   updateWalk,
   deleteWalk,
