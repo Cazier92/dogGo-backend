@@ -1,4 +1,5 @@
 import { Dog } from '../models/dog.js'
+
 import { Profile } from '../models/profile.js'
 import { v2 as cloudinary } from 'cloudinary'
 
@@ -27,6 +28,26 @@ async function show(req, res) {
     console.log(err)
     res.status(500).json(err)
   }
+  // Profile.findById(req.user._id)
+  //   .then(profile => {
+  //     console.log('profile found in show', req.user.profile)
+  //     Dog.findById(req.params.id)
+  //       .then(dog => {
+  //         if (!dog) {
+  //           throw new Error('Dog not found')
+  //         } else if ([...dog.owner].includes(profile._id) === false ||
+  //           profile.dogs.includes(dog._id) === false) {
+  //           res.status(401).json({ message: 'Unauthorized' })
+  //         } else {
+  //           console.log('dog found', dog)
+  //           res.status(200).json(dog)
+  //         }
+  //       })
+  //   })
+  //   .catch(err => {
+  //     console.error("Error: ", err)
+  //     res.status(500).json(err)
+  //   })
 }
 
 //* Post/Create Functions
