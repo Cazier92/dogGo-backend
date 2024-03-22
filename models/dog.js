@@ -15,7 +15,6 @@ const photoSchema = new mongoose.Schema({
 const dogSchema = new Schema({
   name: {type: String, required: true},
   photo: String,
-  age: Number,
   breed: String,
   birthday: Date,
   gender: {

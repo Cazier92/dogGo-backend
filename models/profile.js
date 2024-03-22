@@ -12,11 +12,12 @@ const settingsSchema = new Schema({
 })
 
 const profileSchema = new Schema({
-  name: String,
+  userName: { type: String, required: true, lowercase: true, unique: true },
   photo: String,
   location: String,
   dogs: [{type: Schema.Types.ObjectId, ref: 'Dog'}],
-  settings: {type: [settingsSchema]}
+  settings: {type: [settingsSchema]},
+  paidSub: Boolean,
 },{
   timestamps: true,
 })

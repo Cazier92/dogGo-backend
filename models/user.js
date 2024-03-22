@@ -5,8 +5,8 @@ const saltRounds = 6
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
-  name: String,
-  email: { type: String, required: true, lowercase: true },
+  name: { type: String, required: true, lowercase: true },
+  email: { type: String, required: true, lowercase: true, unique: true },
   password: String,
   profile: { type: Schema.Types.ObjectId, ref: 'Profile' },
 }, {
@@ -38,7 +38,7 @@ userSchema.methods.comparePassword = async function (tryPassword) {
   const isMatch = await bcrypt.compare(tryPassword, this.password)
   console.log('Comparison result: ', isMatch); // Log the comparison result
   return isMatch
- }
+}
 
 const User = mongoose.model('User', userSchema)
 
