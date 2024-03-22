@@ -1,4 +1,5 @@
 import { Profile } from '../models/profile.js'
+import { User } from '../models/user.js'
 import { v2 as cloudinary } from 'cloudinary'
 
 /* ------------------ PROFILE ------------------ */
@@ -6,8 +7,20 @@ import { v2 as cloudinary } from 'cloudinary'
 
 async function index(req, res) {
   try {
-    const profiles = await Profile.find({})
-    res.json(profiles)
+    User.findOne({ email: req.params.email })
+    .then(user => {
+      Profile.findOne({ user: user._id })
+      .then(profile => {
+        console.log(profile)
+        res.status(200).json(profile)
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json(err)
+      })
+  })
+
+    // res.json(profiles)
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
@@ -17,13 +30,24 @@ async function index(req, res) {
 //* Get/Show Functions
 
 async function show(req, res) {
-  try {
-    const profile = await Profile.findById(req.params.id)
-    res.json(profile)
-  } catch (err) {
-    console.log(err)
-    res.status(500).json(err)
-  }
+  // try {
+  //   const profile = await Profile.findById(req.params.id)
+  //   res.json(profile)
+  // } catch (err) {
+  //   console.log(err)
+  //   res.status(500).json(err)
+  // }
+  User.findOne({ email: req.params.email })
+    .then(user => {
+      Profile.findOne({ user: user._id })
+        .then(profile => {
+          res.status(200).json(profile)
+        })
+        .catch(err => {
+          console.log(err)
+          res.status(500).json(err)
+        })
+    })
 }
 
 //* Put/Update Functions
@@ -33,7 +57,7 @@ async function update(req, res) {
     const profile = await Profile.findByIdAndUpdate(
       req.params.id,
       req.body,
-      {new: true}
+      { new: true }
     )
     await profile.save()
     res.status(200).json(profile)
@@ -49,11 +73,11 @@ async function addPhoto(req, res) {
     const profile = await Profile.findById(req.params.id)
 
     const image = await cloudinary.uploader.upload(
-      imageFile, 
+      imageFile,
       { tags: `${req.user.email}` }
     )
     profile.photo = image.url
-    
+
     await profile.save()
     res.status(201).json(profile.photo)
   } catch (err) {
@@ -66,8 +90,8 @@ async function updateLocation(req, res) {
   try {
     const profile = await Profile.findByIdAndUpdate(
       req.params.id,
-      {location: req.body.location},
-      {new: true}
+      { location: req.body.location },
+      { new: true }
     )
     await profile.save()
     res.status(200).json(profile)
@@ -77,10 +101,10 @@ async function updateLocation(req, res) {
   }
 }
 
-export { 
-  index, 
+export {
+  index,
   show,
   update,
-  addPhoto, 
-  updateLocation 
+  addPhoto,
+  updateLocation
 }

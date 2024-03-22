@@ -9,7 +9,7 @@ import { v2 as cloudinary } from 'cloudinary'
 async function index(req, res) {
   try {
     const currentDog = await Dog.find({})
-    console.log(currentDog)
+    console.log(currentDog, 'currentDog')
     res.status(200).json(currentDog)
   } catch (err) {
     console.log(err)
