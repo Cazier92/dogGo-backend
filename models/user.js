@@ -20,17 +20,25 @@ userSchema.set('toJSON', {
   }
 })
 
-userSchema.pre('save', async function (next) {
-  const user = this
-  if (!user.isModified('password')) return next()
+// userSchema.pre('save', async function (next) {
+//   const user = this
+//   if (!user.isModified('password')) return next()
 
-  try {
-    const hash = await bcrypt.hash(user.password, saltRounds)
-    user.password = hash
-    next()
-  } catch (err) {
-    next(err)
-  }
+//   try {
+//     const hash = await bcrypt.hash(user.password, saltRounds)
+//     user.password = hash
+//     next()
+//   } catch (err) {
+//     next(err)
+//   }
+// })
+
+userSchema.pre('save', async function (next) {
+  // 'this' is user doc
+  if (!this.isModified('password')) return next()
+  // update the password with the computed hash
+  this.password = await bcrypt.hash(this.password, saltRounds)
+  return next()
 })
 
 userSchema.methods.comparePassword = async function (tryPassword) {

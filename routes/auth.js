@@ -4,12 +4,13 @@ import * as authCtrl from '../controllers/auth.js'
 
 const router = Router()
 
+router.use(decodeUserFromToken)
 /*---------- Public Routes ----------*/
 router.post('/signup', authCtrl.signup)
 router.post('/login', authCtrl.login, checkAuth)
 
 /*---------- Protected Routes ----------*/
-router.use(decodeUserFromToken)
+
 router.post('/change-password', checkAuth, authCtrl.changePassword)
 
 export { router }

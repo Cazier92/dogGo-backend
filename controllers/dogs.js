@@ -74,18 +74,39 @@ function create(req, res) {
 
 //* Put/Update Functions
 
+// async function update(req, res) {
+//   Dog.findByIdAndUpdate(req.params.id)
+//     console.log('dog id found in update', req.params.id)
+    // .then(dog => {
+      // req.params = req.body,
+      //   { new: true }
+      // dog.save()
+      // res.status(200).json(dog)
+    // })
+//     .catch(err => {
+//       console.log(err)
+//       res.status(500).json(err)
+//     })
+// }
+
 async function update(req, res) {
-  Dog.findByIdAndUpdate(req.params.id)
-    .then(dog => {
-      req.params = req.body,
-        { new: true }
-      dog.save()
-      res.status(200).json(dog)
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(500).json(err)
-    })
+  try {
+    const updatedDog = await Dog.findByIdAndUpdate(
+      req.params.id,       // The ID of the document to update
+      req.body,            // The update data
+      { new: true }        // Options: return the updated document
+    );
+    console.log(updatedDog, 'updatedDog')
+
+    if (!updatedDog) {
+      return res.status(404).json({ message: 'Dog not found' });
+    }
+
+    res.status(200).json(updatedDog);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
 }
 
 

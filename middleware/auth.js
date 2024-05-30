@@ -29,10 +29,8 @@ const decodeUserFromToken = (req, res, next) => {
       });
       return next(err); 
     }
-
-    console.log('Decoded payload:', decoded); 
-    req.user = decoded.user;
-    next();
+    req.user = err ? null : decoded.user;
+    return next();
   });
 };
 

@@ -12,7 +12,7 @@ const settingsSchema = new Schema({
 })
 
 const profileSchema = new Schema({
-  userName: { type: String, required: true, lowercase: true, unique: true },
+  userName: String,
   photo: String,
   location: String,
   dogs: [{type: Schema.Types.ObjectId, ref: 'Dog'}],
