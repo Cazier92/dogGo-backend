@@ -93,7 +93,7 @@ function apiCtrl(req, res) {
 
 function createJWT(user) {
   console.log('user in createJWT: ', { user }); // Log the user
-  return jwt.sign({ user }, process.env.SECRET, { expiresIn: '2m' })
+  return jwt.sign({ user }, process.env.SECRET, { expiresIn: '5m' })
 }
 
 export { signup, login, changePassword, apiCtrl }
