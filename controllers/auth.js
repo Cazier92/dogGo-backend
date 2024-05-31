@@ -5,27 +5,32 @@ import jwt from 'jsonwebtoken'
 
 function signup(req, res) {
   User.findOne({ email: req.body.email })
-    .then(user => {
-      if (user) {
-        throw new Error('Account already exists')
-      } else if (!process.env.SECRET) {
-        throw new Error('no SECRET in .env file')
-      } else {
-        Profile.create(req.body)
-          .then(newProfile => {
-            req.body.profile = newProfile._id
-            User.create(req.body)
-              .then(user => {
-                const token = createJWT(user)
-                res.status(200).json({ token })
-              })
-              .catch(err => {
-                Profile.findByIdAndDelete(req.body.profile)
-                res.status(500).json({ err: err.errmsg })
-              })
-          })
-      }
-    })
+  .then(user => {
+    if (user) {
+      throw new Error('Account already exists')
+    } else if (!process.env.SECRET) {
+      throw new Error('no SECRET in .env file')
+    } else {
+      Profile.create(req.body)
+        .then(newProfile => {
+          req.body.profile = newProfile._id
+          User.create(req.body)
+            .then(user => {
+              // const token = createJWT(user)
+              res.locals.data.user = user
+              // res.locals.data.token = token
+              res.locals.data.token = createJWT(user)
+              const token = res.locals.data.token
+              console.log('Created token in signup: ', token); // Log the token
+              res.status(200).json({ token })
+            })
+            .catch(err => {
+              Profile.findByIdAndDelete(req.body.profile)
+              res.status(500).json({ err: err.errmsg })
+            })
+        })
+    }
+  })
     .catch(err => {
       res.status(500).json({ err: err.message })
     })
@@ -38,14 +43,18 @@ function login(req, res) {
     .then(user => {
       console.log('Found user: ', user); // Log the user
       if (!user) return res.status(401).json({ err: 'User not found' })
+        res.locals.data.user = user
       if (!req.body.password || !user.password) return res.status(400).json({ err: 'Missing password' })
       return user.comparePassword(req.body.password)
     })
-    .then((isMatch, user) => {
+    .then((isMatch) => {
       console.log('Compared passwords: ', isMatch); // Log the result of the password comparison
       if (isMatch) {
-        const token = createJWT(user)
-        res.json({ token })
+        const user = res.locals.data.user
+        console.log('user in login: ', user); // Log the user
+        let token = createJWT(user)
+        console.log('Created token: ', token); // Log the token
+        res.status(200).json({ token })
       } else {
         res.status(401).json({ err: 'Incorrect password' })
       }
@@ -83,7 +92,8 @@ function apiCtrl(req, res) {
 /* --== Helper Functions ==-- */
 
 function createJWT(user) {
-  return jwt.sign({ user }, process.env.SECRET, { expiresIn: '24h' })
+  console.log('user in createJWT: ', { user }); // Log the user
+  return jwt.sign({ user }, process.env.SECRET, { expiresIn: '5m' })
 }
 
 export { signup, login, changePassword, apiCtrl }

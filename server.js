@@ -23,6 +23,10 @@ app.use(cors())
 app.use(logger('dev'))
 app.use(express.json())
 app.use(formData.parse())
+app.use((req, res, next) => {
+  res.locals.data = {}
+  next()
+})
 
 // mount imported routes
 app.use('/api/profiles', profilesRouter)
