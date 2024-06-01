@@ -137,21 +137,6 @@ function create(req, res) {
 
 //* Put/Update Functions
 
-// async function update(req, res) {
-//   Dog.findByIdAndUpdate(req.params.id)
-//     console.log('dog id found in update', req.params.id)
-// .then(dog => {
-// req.params = req.body,
-//   { new: true }
-// dog.save()
-// res.status(200).json(dog)
-// })
-//     .catch(err => {
-//       console.log(err)
-//       res.status(500).json(err)
-//     })
-// }
-
 async function update(req, res) {
   try {
     const updatedDog = await Dog.findByIdAndUpdate(
@@ -250,7 +235,7 @@ const updateWalk = async (req, res) => {
       if (!dog) {
         throw new Error('Dog not found')
       } else {
-        dog.walking = req.body
+        dog.walking.push(req.body)
         dog.save();
         res.status(200).json(dog);
       }
