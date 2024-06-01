@@ -183,15 +183,16 @@ async function addPhoto(req, res) {
 async function deleteDogProfile(req, res) {
   try {
     const dogId = req.params.id;
-    const dog = await Dog.findById(dogId);
+    const dog = await Dog.findByIdAndDelete(dogId);
+    res.status(200).json({ message: 'Dog Profile successfully removed' })
     const profile = await Profile.findById(req.user.profile);
     if (profile.dogs.includes(dogId) === false) {
-      return res.status(404).json({ message: 'Dog not found' })
+      return res.status(404).json({ message: 'Dog not found in profile' })
     }
     // Dog.findByIdAndDelete(dogId);
     profile.dogs.remove(dogId);
     await profile.save();
-    res.status(200).json({ message: 'Dog Profile successfully removed' })
+    // res.status(200).json({ message: 'Dog Profile successfully removed' })
 
   } catch (err) {
     console.log(err);
