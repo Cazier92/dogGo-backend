@@ -207,19 +207,26 @@ const updateWalk = async (req, res) => {
 const deleteWalk = async (req, res) => {
   try {
     const dogId = req.params.id;
-    const walkId = req.params.walkId
+    const walkTime = req.body.walking
 
     const dog = await Dog.findById(dogId);
     if (!dog) {
       return res.status(404).json({ message: 'Dog not found' })
     }
-
-    const walk = dog.walking.id(walkId);
-    if (!walk) {
-      return res.status(404).json({ message: 'Walk not found' })
+    console.log('dog found in deleteWalk', dog)
+    console.log('dogWalking found in deleteWalk', dog.walking)
+    // const walk = dog.walking.id(walkId);
+    // if (!walk) {
+    //   return res.status(404).json({ message: 'Walk not found' })
+    // }
+    console.log('walkTime found in deleteWalk', walkTime)
+    const walkIndex = dog.walking.indexOf(walkTime);
+    // console.log('walk.walkTime found in deleteWalk', walk.walkTime)
+    console.log('walkIndex found in deleteWalk', walkIndex) 
+    if (walkIndex === -1) {
+      return res.status(404).json({ message: 'Walk not found' });
     }
-
-    walk.remove();
+    dog.walking.splice(walkIndex, 1);
     await dog.save();
 
     res.status(200).json({ message: 'Walk deleted successfully' });
