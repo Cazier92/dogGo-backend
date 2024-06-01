@@ -17,77 +17,10 @@ async function index(req, res) {
       res.status(500).json(err)
     }
   }
-  // Dog.findById(req.params.id)
-  // .then(dog => {
-  //   if (!dog) {
-  //     throw new Error('Dog not found')
-  //   }
-  //   Profile.findById(dog.owner)
-  //     .then(profile => {
-  //       console.log('profile found in show', profile)
-  //       if (profile){
-  //         // console.log('dog found', dog)
-  //         // console.log('onwer', dog.owner)
-  //         return res.status(200).json(dog)
-  //       }
-  //     })
-  // User.findById(req.params.id)
-  //   .then(user => {
-  //     console.log('user found', user)
-
-  // Dog.find({})
-  //   .then(dog => {
-  //     console.log('dog found', dog)
-  //     if (!dog) {
-  //       throw new Error('Dog not found')
-  //     }
-  //     Profile.findById(dog.owner)
-  //       .then(profile => {
-  //         console.log('profile found in index', profile)
-  //         if (profile) {
-  //           // console.log('dog found', dog)
-  //           // console.log('onwer', dog.owner)
-  //           return res.status(200).json([...dog])
-  //         }
-  //       })
-  //       .catch(err => {
-  //         console.error("Error: ", err)
-  //         res.status(500).json(err)
-  //       })
-  //   })
-  //   .catch(err => {
-  //     console.error("Error: ", err)
-  //     res.status(500).json(err)
-  //   })
-// }
 
 //* Get/Show Functions
 
 async function show(req, res) {
-  // try {
-  //   const dog = await Dog.findById(req.params.id)
-  //   console.log(dog)
-  //   res.status(200).json(dog, "dog in show")
-  // } catch (err) {
-  //   console.log(err)
-  //   res.status(500).json(err)
-  // }
-  // Profile.findById(req.user.id)
-  //   .then(profile => {
-  //     console.log('profile found in show', req.user.profile)
-  //     Dog.findById(req.params.id)
-  //       .then(dog => {
-  //         if (!dog) {
-  //           throw new Error('Dog not found')
-  //         } else if ([...dog.owner].includes(profile._id) === false ||
-  //           profile.dogs.includes(dog._id) === false) {
-  //           res.status(401).json({ message: 'Unauthorized' })
-  //         } else {
-  //           console.log('dog found', dog)
-  //           res.status(200).json(dog)
-  //         }
-  //       })
-  //   })
     Dog.findById(req.params.id)
       .then(dog => {
         if (!dog) {
@@ -182,18 +115,17 @@ async function addPhoto(req, res) {
 
 async function deleteDogProfile(req, res) {
   try {
+    // Dog Profile is found and deleted 
     const dogId = req.params.id;
     const dog = await Dog.findByIdAndDelete(dogId);
     res.status(200).json({ message: 'Dog Profile successfully removed' })
+    // Query Profile to remove dog from profile
     const profile = await Profile.findById(req.user.profile);
     if (profile.dogs.includes(dogId) === false) {
       return res.status(404).json({ message: 'Dog not found in profile' })
     }
-    // Dog.findByIdAndDelete(dogId);
     profile.dogs.remove(dogId);
     await profile.save();
-    // res.status(200).json({ message: 'Dog Profile successfully removed' })
-
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -231,15 +163,22 @@ const createWalk = async (req, res) => {
 const updateWalk = async (req, res) => {
   // find dog
   console.log('profile found in updatewalk', req.user.profile)
+  const walktimes = req.body.walking
+  console.log('dog found in updatewalk', req.body)
+  console.log('walktimes found in updatewalk', walktimes)
   Dog.findById(req.params.id)
     .then(dog => {
       if (!dog) {
         throw new Error('Dog not found')
       } else {
-        dog.walking.push(req.body)
+        dog.walking.push(walktimes)
         dog.save();
         res.status(200).json(dog);
       }
+    })    
+    .catch(err => {
+      console.error("Error: ", err)
+      res.status(500).json(err)
     })
 
 
