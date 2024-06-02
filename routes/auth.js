@@ -10,7 +10,8 @@ router.post('/signup', authCtrl.signup)
 router.post('/login', authCtrl.login, checkAuth)
 
 /*---------- Protected Routes ----------*/
-
+router.get('/account', checkAuth, authCtrl.index)
+router.post('/account', checkAuth, authCtrl.updateAccount)
 router.post('/change-password', checkAuth, authCtrl.changePassword)
 
 export { router }

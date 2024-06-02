@@ -162,10 +162,10 @@ const createWalk = async (req, res) => {
 
 const updateWalk = async (req, res) => {
   // find dog
-  console.log('profile found in updatewalk', req.user.profile)
+  // console.log('profile found in updatewalk', req.user.profile)
   const walktimes = req.body.walking
-  console.log('dog found in updatewalk', req.body)
-  console.log('walktimes found in updatewalk', walktimes)
+  // console.log('dog found in updatewalk', req.body)
+  // console.log('walktimes found in updatewalk', walktimes)
   Dog.findById(req.params.id)
     .then(dog => {
       if (!dog) {
@@ -213,16 +213,12 @@ const deleteWalk = async (req, res) => {
     if (!dog) {
       return res.status(404).json({ message: 'Dog not found' })
     }
-    console.log('dog found in deleteWalk', dog)
-    console.log('dogWalking found in deleteWalk', dog.walking)
-    // const walk = dog.walking.id(walkId);
-    // if (!walk) {
-    //   return res.status(404).json({ message: 'Walk not found' })
-    // }
-    console.log('walkTime found in deleteWalk', walkTime)
+    // console.log('dog found in deleteWalk', dog)
+    // console.log('dogWalking found in deleteWalk', dog.walking)
+    // console.log('walkTime found in deleteWalk', walkTime)
     const walkIndex = dog.walking.indexOf(walkTime);
     // console.log('walk.walkTime found in deleteWalk', walk.walkTime)
-    console.log('walkIndex found in deleteWalk', walkIndex) 
+    // console.log('walkIndex found in deleteWalk', walkIndex) 
     if (walkIndex === -1) {
       return res.status(404).json({ message: 'Walk not found' });
     }

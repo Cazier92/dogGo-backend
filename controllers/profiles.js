@@ -6,19 +6,23 @@ import { v2 as cloudinary } from 'cloudinary'
 //* Get/Indexing Functions
 
 async function index(req, res) {
+  console.log(req.body, "req.body in profiles index"); // Log the request body
   try {
-    User.findOne({ email: req.params.email })
-    .then(user => {
-      Profile.findOne({ user: user._id })
-      .then(profile => {
-        console.log(profile)
-        res.status(200).json(profile)
-      })
-      .catch(err => {
-        console.log(err)
-        res.status(500).json(err)
-      })
-  })
+    const user = await User.findOne({ email: req.params.email })
+    // .then(user => {
+    // Profile.findOne({ user: user._id })
+    // .then(profile => {
+    //   console.log(profile)
+    //   res.status(200).json(profile)
+    console.log(user, "user")
+    // console.log(res.locals.data.user, "res.locals.data.user")
+    res.status(200).json(user)
+    // })
+    // .catch(err => {
+    //   console.log(err)
+    //   res.status(500).json(err)
+    // })
+    // })
 
     // res.json(profiles)
   } catch (err) {
@@ -30,23 +34,17 @@ async function index(req, res) {
 //* Get/Show Functions
 
 async function show(req, res) {
-  // try {
-  //   const profile = await Profile.findById(req.params.id)
-  //   res.json(profile)
-  // } catch (err) {
-  //   console.log(err)
-  //   res.status(500).json(err)
-  // }
-  User.findOne({ email: req.params.email })
-    .then(user => {
-      Profile.findOne({ user: user._id })
-        .then(profile => {
-          res.status(200).json(profile)
-        })
-        .catch(err => {
-          console.log(err)
-          res.status(500).json(err)
-        })
+  Profile.findById(req.user.profile)
+    .then(profile => {
+      console.log(profile, "profile in show")
+      if (!profile) {
+        throw new Error('Profile not found')
+      }
+      res.status(200).json(profile)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
     })
 }
 

@@ -4,7 +4,9 @@
 [] findWeather function using process.env
 
 ## Postman:
-[] complete running through dog routes
+[X] complete running through dog routes
+[] run through profile routes
+[] add additional linked list in dog
 
 
 # Frontend:
