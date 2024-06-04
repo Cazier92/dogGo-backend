@@ -6,11 +6,19 @@ const Schema = mongoose.Schema
 //   time: String
 // })
 
+// const medicalSchema = new Schema({
+//   vet: String,
+//   vaccines: String,
+//   treatment: String,
+//   medicine: String,
+//   notes: String,
+// })
 
-const photoSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  photoUrl: String,
-})
+
+// const photoSchema = new mongoose.Schema({
+//   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+//   photoUrl: String,
+// })
 
 const dogSchema = new Schema({
   name: {type: String, required: true},
@@ -24,7 +32,8 @@ const dogSchema = new Schema({
     ]
   },
   walking: [String],
-  owner: [{type: Schema.Types.ObjectId, ref: 'Profile'}]
+  owner: [{type: Schema.Types.ObjectId, ref: 'Profile'}],
+  // medicalRecords: {type: [medicalSchema]},
 },{
   timestamps: true,
 })

@@ -38,7 +38,7 @@ function signup(req, res) {
 
 
 function login(req, res) {
-  console.log(req.body); // Log the request body
+  console.log(req.body, "req.body"); // Log the request body
   User.findOne({ email: req.body.email })
     .then(user => {
       console.log('Found user: ', user); // Log the user
@@ -52,6 +52,7 @@ function login(req, res) {
       if (isMatch) {
         const user = res.locals.data.user
         console.log('user in login: ', user); // Log the user
+        console.log('user.profile', user.profile)
         let token = createJWT(user)
         console.log('Created token: ', token); // Log the token
         res.status(200).json({ token })
@@ -64,6 +65,33 @@ function login(req, res) {
       res.status(500).json(err)
     })
 }
+function updateAccount(req, res) {
+  User.findById(req.user._id)
+    .then(user => {
+      if (!user) return res.status(401).json({ err: 'User not found' })
+      user.name = req.body.name || user.name
+      user.email = req.body.email || user.email
+      user.save()
+        .then(() => {
+          const token = createJWT(user)
+          res.status(200).json({ token })
+        })
+    })
+}
+
+function index(req, res) {
+  User.findById(req.user._id)
+  .then(user => {
+    if (!user) {
+      throw new Error('User not found')
+    }
+    res.status(200).json(user)
+  })
+  .catch(err => {
+    console.error("Error: ", err)
+    res.status(500).json(err)
+  })
+}  
 
 function changePassword(req, res) {
   User.findById(req.user._id)
@@ -96,4 +124,4 @@ function createJWT(user) {
   return jwt.sign({ user }, process.env.SECRET, { expiresIn: '5m' })
 }
 
-export { signup, login, changePassword, apiCtrl }
+export { signup, login, index, updateAccount, changePassword, apiCtrl }

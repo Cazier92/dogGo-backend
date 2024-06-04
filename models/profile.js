@@ -12,7 +12,6 @@ const settingsSchema = new Schema({
 })
 
 const profileSchema = new Schema({
-  userName: String,
   photo: String,
   location: String,
   dogs: [{type: Schema.Types.ObjectId, ref: 'Dog'}],
