@@ -16,8 +16,8 @@ const decodeUserFromToken = (req, res, next) => {
   // remove 'Bearer ' prefix and extract token
   let token = authHeader.slice(7);
 
-  console.log('Secret Key:', SECRET)
-  console.log('token:', token); 
+  // console.log('Secret Key:', SECRET)
+  // console.log('token:', token); 
 
   jwt.verify(token, SECRET, (err, decoded) => {
     if (err) {

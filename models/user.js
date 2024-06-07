@@ -44,7 +44,7 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.comparePassword = async function (tryPassword) {
   console.log('Trying to compare password: ', tryPassword); // Log the input password
   const isMatch = await bcrypt.compare(tryPassword, this.password)
-  console.log('Comparison result: ', isMatch); // Log the comparison result
+  // console.log('Comparison result: ', isMatch); // Log the comparison result
   return isMatch
 }
 
@@ -52,15 +52,3 @@ const User = mongoose.model('User', userSchema)
 
 export { User }
 
-
-// name: {type: String, required: true},
-// email: { type: String, required: true, lowercase: true },
-// password: {
-//   type: String,
-//   trim: true,
-//   minLength: 6,
-//   required: true
-// },
-// profile: { type: Schema.Types.ObjectId, ref: 'Profile' },
-// }, {
-//   timestamps: true,
