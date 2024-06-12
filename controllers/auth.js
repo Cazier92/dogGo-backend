@@ -123,7 +123,7 @@ function changePassword(req, res) {
         user.save()
           .then(() => {
             const token = createJWT(user)
-            res.json({ message: 'Password changed successfully' });
+            res.json({token},{ message: 'Password changed successfully' });
           })
       } else {
         res.status(401).json({ err: 'Incorrect password' })

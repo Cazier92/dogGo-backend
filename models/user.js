@@ -4,10 +4,12 @@ import bcrypt from 'bcrypt'
 const saltRounds = 6
 const Schema = mongoose.Schema
 
+// const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 const userSchema = new Schema({
   name: { type: String, required: true, lowercase: true },
   email: { type: String, required: true, lowercase: true, unique: true },
-  password: String,
+  password: { type: String, required: true},
   profile: { type: Schema.Types.ObjectId, ref: 'Profile' },
 }, {
   timestamps: true,
@@ -19,19 +21,6 @@ userSchema.set('toJSON', {
     return ret
   }
 })
-
-// userSchema.pre('save', async function (next) {
-//   const user = this
-//   if (!user.isModified('password')) return next()
-
-//   try {
-//     const hash = await bcrypt.hash(user.password, saltRounds)
-//     user.password = hash
-//     next()
-//   } catch (err) {
-//     next(err)
-//   }
-// })
 
 userSchema.pre('save', async function (next) {
   // 'this' is user doc

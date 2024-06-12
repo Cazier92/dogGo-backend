@@ -5,7 +5,7 @@
 
 ## Postman:
 [X] complete running through dog routes
-[] run through profile routes
+[X] run through profile routes
 [] add additional linked list in dog
 
 
